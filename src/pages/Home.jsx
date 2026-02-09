@@ -136,7 +136,7 @@ const Home = () => {
   return (
     <div className="home-page">
       <div className="page-header">
-        <h1 className="page-title">Pokédex Manager</h1>
+        <h1 className="page-title">Pokédex</h1>
         <p className="page-subtitle">Gérez votre collection de Pokémons</p>
       </div>
 

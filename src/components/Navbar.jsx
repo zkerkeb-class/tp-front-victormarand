@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Gamepad2, Heart, BarChart3, Zap, TrendingUp, Package } from 'lucide-react';
 import './navbar.css';
 
@@ -10,32 +10,32 @@ const Navbar = () => {
           <div className="brand-icon">
             <Gamepad2 size={24} />
           </div>
-          <span className="brand-text">PokéManager</span>
+          <span className="brand-text">Pokédex</span>
         </Link>
         
         <div className="navbar-links">
-          <Link to="/" className="nav-link">Accueil</Link>
-          <Link to="/collection" className="nav-link collection-link">
+          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Accueil</NavLink>
+          <NavLink to="/collection" className={({ isActive }) => `nav-link collection-link ${isActive ? 'active' : ''}`}>
             <Package size={18} />
             Collection
-          </Link>
-          <Link to="/trending" className="nav-link trending-link">
+          </NavLink>
+          <NavLink to="/trending" className={({ isActive }) => `nav-link trending-link ${isActive ? 'active' : ''}`}>
             <TrendingUp size={18} />
             Tendances
-          </Link>
-          <Link to="/statistics" className="nav-link stats-link">
+          </NavLink>
+          <NavLink to="/statistics" className={({ isActive }) => `nav-link stats-link ${isActive ? 'active' : ''}`}>
             <BarChart3 size={18} />
             Stats
-          </Link>
-          <Link to="/comparison" className="nav-link compare-link">
+          </NavLink>
+          <NavLink to="/comparison" className={({ isActive }) => `nav-link compare-link ${isActive ? 'active' : ''}`}>
             <Zap size={18} />
             Comparer
-          </Link>
-          <Link to="/favorites" className="nav-link favorites-link">
+          </NavLink>
+          <NavLink to="/favorites" className={({ isActive }) => `nav-link favorites-link ${isActive ? 'active' : ''}`}>
             <Heart size={18} />
             Favoris
-          </Link>
-          <Link to="/add" className="nav-link">Ajouter</Link>
+          </NavLink>
+          <NavLink to="/add" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Ajouter</NavLink>
         </div>
       </div>
     </nav>

@@ -270,7 +270,7 @@ const AddPokemon = () => {
                       placeholder={`Type ${index + 1}`}
                       className="form-input"
                     />
-                    {formData.types.length > 1 && (
+                    {formData.type.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeTypeField(index)}

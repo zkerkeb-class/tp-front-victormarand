@@ -30,7 +30,7 @@ function App() {
           </Routes>
         </main>
         <footer className="app-footer">
-          © 2025 PokéManager - Projet Étudiant
+          © 2025 Pokédex - Projet Étudiant
         </footer>
       </div>
     </Router>

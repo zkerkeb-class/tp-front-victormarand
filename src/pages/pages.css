@@ -267,41 +267,63 @@
   position: relative;
 }
 
-.favorite-btn {
+/* CARD ACTION BUTTONS */
+.card-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: transparent;
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0.5rem;
+  right: 0.5rem;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 50%;
+}
+
+.favorite-btn,
+.collection-btn {
   width: 2.5rem;
   height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  font-size: 1.2rem;
   transition: all 0.3s ease;
-  color: #dc2626;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.favorite-btn:hover {
+.favorite-btn {
+  color: #dc2626;
+}
+
+.favorite-btn:hover,
+.collection-btn:hover {
   transform: scale(1.1);
   background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .favorite-btn.active {
-  color: #dc2626;
-  fill: #dc2626;
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
 }
 
-.favorite-btn svg {
-  fill: currentColor;
+.collection-btn {
+  color: #8b5cf6;
+}
+
+.collection-btn.active {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 
 .favorite-btn.active svg {
-  fill: #dc2626;
+  fill: currentColor;
 }
 
 .remove-favorite-btn {
@@ -2000,4 +2022,23 @@
   .collection-stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* EMPTY STATE */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%);
+  border: 2px dashed #d1d5db;
+}
+
+.empty-message {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin: 0;
 }

@@ -96,7 +96,7 @@ const MyCollection = () => {
       </button>
 
       <div className="page-header">
-        <h1 className="page-title">📦 Ma Collection</h1>
+        <h1 className="page-title">📦 Ma Collection Pokédex</h1>
         <p className="page-subtitle">{collectionPokemons.length} Pokémon{collectionPokemons.length > 1 ? 's' : ''} dans ma collection</p>
       </div>
 

@@ -27,25 +27,17 @@ const Statistics = () => {
 
   const fetchStatistics = async () => {
     try {
+      if (collection.length === 0) {
+        setStats(prev => ({ ...prev, loading: false }));
+        return;
+      }
+      
       let pokemons = [];
-      if (collection.length > 0) {
-        for (const id of collection) {
-          const response = await fetch(`${API_URL}/pokemons/${id}`);
-          if (response.ok) {
-            const data = await response.json();
-            pokemons.push(data.data);
-          }
-        }
-      } else {
-        let page = 1;
-        let hasMore = true;
-        while (hasMore) {
-          const response = await fetch(`${API_URL}/pokemons?page=${page}`);
-          if (!response.ok) throw new Error('Erreur API');
+      for (const id of collection) {
+        const response = await fetch(`${API_URL}/pokemons/${id}`);
+        if (response.ok) {
           const data = await response.json();
-          pokemons.push(...data.data);
-          if (page >= data.totalPages) hasMore = false;
-          page++;
+          pokemons.push(data.data);
         }
       }
 
@@ -100,6 +92,10 @@ const Statistics = () => {
         <div className="loading-container">
           <div className="spinner"></div>
           <p>Calcul des statistiques...</p>
+        </div>
+      ) : collection.length === 0 ? (
+        <div className="empty-state">
+          <p className="empty-message">Votre collection est vide. Ajoutez des Pokémons pour voir les statistiques!</p>
         </div>
       ) : (
         <>
