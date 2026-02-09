@@ -42,7 +42,7 @@ const Trending = () => {
       }
 
       const trendingList = [...allPokemons]
-        .sort((a, b) => b.cp - a.cp)
+        .sort((a, b) => b.base.Attack - a.base.Attack)
         .slice(0, 12);
 
       setTrending(trendingList);
@@ -86,15 +86,15 @@ const Trending = () => {
               <div className="trending-rank">#{idx + 1}</div>
               
               <div className="trending-image">
-                <img src={pokemon.picture} alt={pokemon.name} />
+                <img src={pokemon.image} alt={pokemon.name.english} />
                 <div className="trending-glow"></div>
               </div>
 
               <div className="trending-content">
-                <h3 className="trending-name">{pokemon.name}</h3>
+                <h3 className="trending-name">{pokemon.name.english}</h3>
                 
                 <div className="trending-types">
-                  {pokemon.types.map((type, i) => (
+                  {pokemon.type.map((type, i) => (
                     <span key={i} className={`type-badge type-${type.toLowerCase()}`}>
                       {type}
                     </span>
@@ -104,11 +104,11 @@ const Trending = () => {
                 <div className="trending-stats-row">
                   <div className="trending-stat">
                     <span className="trending-stat-icon">❤️</span>
-                    <span className="trending-stat-value">{pokemon.hp}</span>
+                    <span className="trending-stat-value">{pokemon.base.HP}</span>
                   </div>
                   <div className="trending-stat">
                     <span className="trending-stat-icon">⚡</span>
-                    <span className="trending-stat-value">{pokemon.cp}</span>
+                    <span className="trending-stat-value">{pokemon.base.Attack}</span>
                   </div>
                 </div>
 

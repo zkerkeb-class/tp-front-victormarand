@@ -99,15 +99,15 @@ const Favorites = () => {
                   <div className="pokemon-card">
                     <div className="pokemon-image-container">
                       <img
-                        src={pokemon.picture}
-                        alt={pokemon.name}
+                        src={pokemon.image}
+                        alt={pokemon.name.english}
                         className="pokemon-image"
                       />
                     </div>
                     <div className="pokemon-card-content">
-                      <h3 className="pokemon-name">{pokemon.name}</h3>
+                      <h3 className="pokemon-name">{pokemon.name.english}</h3>
                       <div className="pokemon-types">
-                        {pokemon.types.map((type, idx) => (
+                        {pokemon.type.map((type, idx) => (
                           <span key={idx} className={`type-badge type-${type.toLowerCase()}`}>
                             {type}
                           </span>
@@ -116,11 +116,11 @@ const Favorites = () => {
                       <div className="pokemon-stats">
                         <div className="stat">
                           <span className="stat-label">HP</span>
-                          <span className="stat-value">{pokemon.hp}</span>
+                          <span className="stat-value">{pokemon.base.HP}</span>
                         </div>
                         <div className="stat">
-                          <span className="stat-label">CP</span>
-                          <span className="stat-value">{pokemon.cp}</span>
+                          <span className="stat-label">ATK</span>
+                          <span className="stat-value">{pokemon.base.Attack}</span>
                         </div>
                       </div>
                     </div>

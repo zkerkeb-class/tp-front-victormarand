@@ -8,6 +8,10 @@ const API_URL = 'http://localhost:3000/api';
 
 const Statistics = () => {
   const navigate = useNavigate();
+  const [collection, setCollection] = useState(() => {
+    const saved = localStorage.getItem('pokemonCollection');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [stats, setStats] = useState({
     totalPokemons: 0,
     averageHP: 0,
@@ -19,38 +23,45 @@ const Statistics = () => {
 
   useEffect(() => {
     fetchStatistics();
-  }, []);
+  }, [collection]);
 
   const fetchStatistics = async () => {
     try {
-      const pokemons = [];
-      let page = 1;
-      let hasMore = true;
-
-      while (hasMore) {
-        const response = await fetch(`${API_URL}/pokemons?page=${page}`);
-        if (!response.ok) throw new Error('Erreur API');
-        
-        const data = await response.json();
-        pokemons.push(...data.data);
-        
-        if (page >= data.totalPages) hasMore = false;
-        page++;
+      let pokemons = [];
+      if (collection.length > 0) {
+        for (const id of collection) {
+          const response = await fetch(`${API_URL}/pokemons/${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            pokemons.push(data.data);
+          }
+        }
+      } else {
+        let page = 1;
+        let hasMore = true;
+        while (hasMore) {
+          const response = await fetch(`${API_URL}/pokemons?page=${page}`);
+          if (!response.ok) throw new Error('Erreur API');
+          const data = await response.json();
+          pokemons.push(...data.data);
+          if (page >= data.totalPages) hasMore = false;
+          page++;
+        }
       }
 
       const totalPokemons = pokemons.length;
-      const averageHP = Math.round(pokemons.reduce((sum, p) => sum + p.hp, 0) / totalPokemons);
-      const averageCP = Math.round(pokemons.reduce((sum, p) => sum + p.cp, 0) / totalPokemons);
+      const averageHP = Math.round(pokemons.reduce((sum, p) => sum + p.base.HP, 0) / totalPokemons);
+      const averageCP = Math.round(pokemons.reduce((sum, p) => sum + p.base.Attack, 0) / totalPokemons);
 
       const typesCount = {};
       pokemons.forEach(p => {
-        p.types.forEach(type => {
+        p.type.forEach(type => {
           typesCount[type] = (typesCount[type] || 0) + 1;
         });
       });
 
       const topPokemons = [...pokemons]
-        .sort((a, b) => b.cp - a.cp)
+        .sort((a, b) => b.base.Attack - a.base.Attack)
         .slice(0, 5);
 
       setStats({
@@ -81,8 +92,8 @@ const Statistics = () => {
       </button>
 
       <div className="page-header">
-        <h1 className="page-title">📊 Statistiques Pokédex</h1>
-        <p className="page-subtitle">Analyse complète de votre collection</p>
+        <h1 className="page-title">📊 Statistiques {collection.length > 0 ? 'Ma Collection' : 'Pokédex'}</h1>
+        <p className="page-subtitle">{collection.length > 0 ? 'Analyse de votre collection' : 'Analyse complète de tous les Pokémons'}</p>
       </div>
 
       {stats.loading ? (
@@ -167,9 +178,9 @@ const Statistics = () => {
                 <div key={pokemon._id} className="top-pokemon-item">
                   <div className="rank-badge">{idx + 1}</div>
                   <div className="pokemon-info">
-                    <h4 className="pokemon-rank-name">{pokemon.name}</h4>
+                    <h4 className="pokemon-rank-name">{pokemon.name.english}</h4>
                     <div className="pokemon-rank-types">
-                      {pokemon.types.map((type, i) => (
+                      {pokemon.type.map((type, i) => (
                         <span key={i} className={`type-badge type-${type.toLowerCase()}`}>
                           {type}
                         </span>
@@ -179,11 +190,11 @@ const Statistics = () => {
                   <div className="pokemon-rank-stats">
                     <div className="rank-stat">
                       <span className="rank-stat-label">HP</span>
-                      <span className="rank-stat-value">{pokemon.hp}</span>
+                      <span className="rank-stat-value">{pokemon.base.HP}</span>
                     </div>
                     <div className="rank-stat">
-                      <span className="rank-stat-label">CP</span>
-                      <span className="rank-stat-value">{pokemon.cp}</span>
+                      <span className="rank-stat-label">ATK</span>
+                      <span className="rank-stat-value">{pokemon.base.Attack}</span>
                     </div>
                   </div>
                 </div>

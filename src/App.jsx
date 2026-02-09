@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx';
 import PokemonDetail from './pages/PokemonDetail.jsx';
 import AddPokemon from './pages/AddPokemon.jsx';
 import Favorites from './pages/Favorites.jsx';
+import MyCollection from './pages/MyCollection.jsx';
 import Statistics from './pages/Statistics.jsx';
 import Comparison from './pages/Comparison.jsx';
 import Trending from './pages/Trending.jsx';
@@ -22,6 +23,7 @@ function App() {
             <Route path="/pokemon/:id" element={<PokemonDetail />} />
             <Route path="/add" element={<AddPokemon />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/collection" element={<MyCollection />} />
             <Route path="/statistics" element={<Statistics />} />
             <Route path="/comparison" element={<Comparison />} />
             <Route path="/trending" element={<Trending />} />

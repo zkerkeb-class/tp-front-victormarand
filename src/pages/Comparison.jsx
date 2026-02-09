@@ -21,7 +21,7 @@ const Comparison = () => {
   useEffect(() => {
     if (search.trim()) {
       const filtered = pokemons.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase())
+        p.name.english.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredPokemons(filtered.slice(0, 10));
     } else {
@@ -127,11 +127,11 @@ const Comparison = () => {
             ) : (
               <div className="selected-pokemon-preview">
                 <img
-                  src={selected[index].picture}
-                  alt={selected[index].name}
+                  src={selected[index].image}
+                  alt={selected[index].name.english}
                   className="preview-image"
                 />
-                <h3>{selected[index].name}</h3>
+                <h3>{selected[index].name.english}</h3>
                 <button
                   className="remove-slot-btn"
                   onClick={() => removePokemon(index)}
@@ -164,8 +164,8 @@ const Comparison = () => {
                   className="dropdown-item"
                   onClick={() => selectPokemon(pokemon)}
                 >
-                  <img src={pokemon.picture} alt={pokemon.name} />
-                  <span>{pokemon.name}</span>
+                  <img src={pokemon.image} alt={pokemon.name.english} />
+                  <span>{pokemon.name.english}</span>
                 </div>
               ))}
             </div>
@@ -181,20 +181,20 @@ const Comparison = () => {
           <div className="comparison-table">
             <StatComparison
               label="HP"
-              value1={selected[0].hp}
-              value2={selected[1].hp}
+              value1={selected[0].base.HP}
+              value2={selected[1].base.HP}
             />
             <StatComparison
-              label="CP"
-              value1={selected[0].cp}
-              value2={selected[1].cp}
+              label="ATK"
+              value1={selected[0].base.Attack}
+              value2={selected[1].base.Attack}
             />
 
             {/* TYPES COMPARISON */}
             <div className="stat-comparison-row types-row">
               <div className="stat-column">
                 <div className="types-comparison">
-                  {selected[0].types.map((type, i) => (
+                  {selected[0].type.map((type, i) => (
                     <span key={i} className={`type-badge type-${type.toLowerCase()}`}>
                       {type}
                     </span>
@@ -204,7 +204,7 @@ const Comparison = () => {
               <div className="stat-label">Types</div>
               <div className="stat-column">
                 <div className="types-comparison">
-                  {selected[1].types.map((type, i) => (
+                  {selected[1].type.map((type, i) => (
                     <span key={i} className={`type-badge type-${type.toLowerCase()}`}>
                       {type}
                     </span>
@@ -216,13 +216,13 @@ const Comparison = () => {
 
           {/* WINNER BADGE */}
           <div className="comparison-winner">
-            {selected[0].cp > selected[1].cp ? (
+            {selected[0].base.Attack > selected[1].base.Attack ? (
               <>
-                <span className="winner-text">🏆 {selected[0].name} est plus fort!</span>
+                <span className="winner-text">🏆 {selected[0].name.english} est plus fort!</span>
               </>
-            ) : selected[1].cp > selected[0].cp ? (
+            ) : selected[1].base.Attack > selected[0].base.Attack ? (
               <>
-                <span className="winner-text">🏆 {selected[1].name} est plus fort!</span>
+                <span className="winner-text">🏆 {selected[1].name.english} est plus fort!</span>
               </>
             ) : (
               <span className="winner-text">⚖️ Égalité parfaite!</span>

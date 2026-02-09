@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Gamepad2, Heart, BarChart3, Zap, TrendingUp } from 'lucide-react';
+import { Gamepad2, Heart, BarChart3, Zap, TrendingUp, Package } from 'lucide-react';
 import './navbar.css';
 
 const Navbar = () => {
@@ -15,6 +15,10 @@ const Navbar = () => {
         
         <div className="navbar-links">
           <Link to="/" className="nav-link">Accueil</Link>
+          <Link to="/collection" className="nav-link collection-link">
+            <Package size={18} />
+            Collection
+          </Link>
           <Link to="/trending" className="nav-link trending-link">
             <TrendingUp size={18} />
             Tendances

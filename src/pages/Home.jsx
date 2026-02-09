@@ -25,6 +25,10 @@ const Home = () => {
     const saved = localStorage.getItem('pokemonFavorites');
     return saved ? JSON.parse(saved) : [];
   });
+  const [collection, setCollection] = useState(() => {
+    const saved = localStorage.getItem('pokemonCollection');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const fetchPokemons = async (page = 1, search = '', types = []) => {
     setLoading(true);
@@ -41,7 +45,7 @@ const Home = () => {
 
       if (types.length > 0) {
         pokemonArray = pokemonArray.filter(p =>
-          types.some(t => p.types.map(pt => pt.toLowerCase()).includes(t.toLowerCase()))
+          types.some(t => p.type.map(pt => pt.toLowerCase()).includes(t.toLowerCase()))
         );
       }
 
@@ -64,14 +68,14 @@ const Home = () => {
       let aVal, bVal;
       
       if (sortBy === 'name') {
-        aVal = a.name.toLowerCase();
-        bVal = b.name.toLowerCase();
+        aVal = a.name.english.toLowerCase();
+        bVal = b.name.english.toLowerCase();
       } else if (sortBy === 'hp') {
-        aVal = a.hp;
-        bVal = b.hp;
+        aVal = a.base.HP;
+        bVal = b.base.HP;
       } else if (sortBy === 'cp') {
-        aVal = a.cp;
-        bVal = b.cp;
+        aVal = a.base.Attack;
+        bVal = b.base.Attack;
       }
 
       if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
@@ -103,6 +107,16 @@ const Home = () => {
         ? prev.filter(id => id !== pokemonId)
         : [...prev, pokemonId];
       localStorage.setItem('pokemonFavorites', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const toggleCollection = (pokemonId) => {
+    setCollection(prev => {
+      const updated = prev.includes(pokemonId)
+        ? prev.filter(id => id !== pokemonId)
+        : [...prev, pokemonId];
+      localStorage.setItem('pokemonCollection', JSON.stringify(updated));
       return updated;
     });
   };
@@ -215,13 +229,22 @@ const Home = () => {
           <div className="pokemon-grid">
             {pokemons.map((pokemon) => (
               <div key={pokemon._id} className="pokemon-card-wrapper">
-                <button
-                  className={`favorite-btn ${favorites.includes(pokemon._id) ? 'active' : ''}`}
-                  onClick={() => toggleFavorite(pokemon._id)}
-                  title="Ajouter aux favoris"
-                >
-                  <Heart size={20} />
-                </button>
+                <div className="card-action-buttons">
+                  <button
+                    className={`favorite-btn ${favorites.includes(pokemon._id) ? 'active' : ''}`}
+                    onClick={() => toggleFavorite(pokemon._id)}
+                    title="Ajouter aux favoris"
+                  >
+                    <Heart size={20} />
+                  </button>
+                  <button
+                    className={`collection-btn ${collection.includes(pokemon._id) ? 'active' : ''}`}
+                    onClick={() => toggleCollection(pokemon._id)}
+                    title="Ajouter à ma collection"
+                  >
+                    📦
+                  </button>
+                </div>
                 <Link
                   key={pokemon._id}
                   to={`/pokemon/${pokemon._id}`}
@@ -230,15 +253,15 @@ const Home = () => {
                   <div className="pokemon-card">
                     <div className="pokemon-image-container">
                       <img
-                        src={pokemon.picture}
-                        alt={pokemon.name}
+                        src={pokemon.image}
+                        alt={pokemon.name.english}
                         className="pokemon-image"
                       />
                     </div>
                     <div className="pokemon-card-content">
-                      <h3 className="pokemon-name">{pokemon.name}</h3>
+                      <h3 className="pokemon-name">{pokemon.name.english}</h3>
                       <div className="pokemon-types">
-                        {pokemon.types.map((type, idx) => (
+                        {pokemon.type.map((type, idx) => (
                           <span key={idx} className={`type-badge type-${type.toLowerCase()}`}>
                             {type}
                           </span>
@@ -247,11 +270,11 @@ const Home = () => {
                       <div className="pokemon-stats">
                         <div className="stat">
                           <span className="stat-label">HP</span>
-                          <span className="stat-value">{pokemon.hp}</span>
+                          <span className="stat-value">{pokemon.base.HP}</span>
                         </div>
                         <div className="stat">
-                          <span className="stat-label">CP</span>
-                          <span className="stat-value">{pokemon.cp}</span>
+                          <span className="stat-label">ATK</span>
+                          <span className="stat-value">{pokemon.base.Attack}</span>
                         </div>
                       </div>
                     </div>

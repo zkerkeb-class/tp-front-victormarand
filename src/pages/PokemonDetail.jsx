@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { ArrowLeft, Trash2, Edit2, Check, X, Globe } from 'lucide-react';
+import { ArrowLeft, Trash2, Edit2, Check, X, Globe, Heart } from 'lucide-react';
 import StatsRadar from '../components/StatsRadar.jsx';
 import DeleteModal from '../components/modals/DeleteModal';
 import '../components/stats-radar.css';
@@ -18,6 +18,14 @@ const PokemonDetail = () => {
   const [editData, setEditData] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [activeNameTab, setActiveNameTab] = useState('english');
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem('pokemonFavorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [collection, setCollection] = useState(() => {
+    const saved = localStorage.getItem('pokemonCollection');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   useEffect(() => {
     fetchPokemon();
@@ -119,6 +127,28 @@ const PokemonDetail = () => {
     }
   };
 
+  const toggleFavorite = () => {
+    setFavorites(prev => {
+      const updated = prev.includes(id)
+        ? prev.filter(favId => favId !== id)
+        : [...prev, id];
+      localStorage.setItem('pokemonFavorites', JSON.stringify(updated));
+      toast.success(updated.includes(id) ? 'Ajouté aux favoris' : 'Retiré des favoris');
+      return updated;
+    });
+  };
+
+  const toggleCollection = () => {
+    setCollection(prev => {
+      const updated = prev.includes(id)
+        ? prev.filter(collId => collId !== id)
+        : [...prev, id];
+      localStorage.setItem('pokemonCollection', JSON.stringify(updated));
+      toast.success(updated.includes(id) ? 'Ajouté à ma collection' : 'Retiré de ma collection');
+      return updated;
+    });
+  };
+
   if (loading) {
     return (
       <div className="detail-page">
@@ -150,14 +180,14 @@ const PokemonDetail = () => {
       <div className="detail-container">
         <div className="detail-image-section">
           <div className="detail-image-wrapper">
-            <img src={pokemon.picture} alt={pokemon.name} className="detail-image" />
+            <img src={pokemon.image} alt={pokemon.name.english} className="detail-image" />
           </div>
         </div>
 
         <div className="detail-content-section">
           {!isEditing ? (
             <>
-              <h1 className="detail-title">{getPokemonName()}</h1>
+              <h1 className="detail-title">{pokemon.name.english}</h1>
               
               {typeof pokemon.name === 'object' && (
                 <div className="pokemon-names-section">
@@ -199,6 +229,22 @@ const PokemonDetail = () => {
               )}
 
               <div className="action-buttons">
+                <button
+                  className={`btn btn-secondary ${favorites.includes(id) ? 'active' : ''}`}
+                  onClick={toggleFavorite}
+                  title="Ajouter aux favoris"
+                >
+                  <Heart size={18} />
+                  {favorites.includes(id) ? 'En favoris' : 'Favoris'}
+                </button>
+                <button
+                  className={`btn btn-secondary ${collection.includes(id) ? 'active' : ''}`}
+                  onClick={toggleCollection}
+                  title="Ajouter à ma collection"
+                >
+                  📦
+                  {collection.includes(id) ? 'En collection' : 'Collection'}
+                </button>
                 <button
                   className="btn btn-primary"
                   onClick={() => setIsEditing(true)}
