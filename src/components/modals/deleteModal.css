@@ -1,0 +1,23 @@
+.warning-icon {
+  color: #dc2626;
+  margin: 0 auto 1rem;
+  animation: slideUp 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .modal-footer .btn {
+    flex: 1 1 calc(50% - 0.5rem);
+  }
+}
