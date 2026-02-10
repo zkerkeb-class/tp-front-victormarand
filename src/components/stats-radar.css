@@ -4,9 +4,9 @@
   flex-direction: column;
   gap: 2rem;
   background: white;
-  padding: 2rem;
-  border-radius: 1.25rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .stats-radar-svg {
@@ -35,16 +35,15 @@
 }
 
 .stat-item {
-  padding: 1rem;
-  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  transition: all 0.3s ease;
+  padding: 0.85rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eaeef2;
+  transition: border-color 0.18s ease;
 }
 
 .stat-item:hover {
-  border-color: #4f46e5;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+  border-color: rgba(79,70,229,0.06);
 }
 
 .stat-item-header {
@@ -85,9 +84,9 @@
 /* POKEMON NAMES */
 .pokemon-names-section {
   background: white;
-  padding: 2rem;
-  border-radius: 1.25rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: none;
   margin-bottom: 2rem;
 }
 
@@ -105,20 +104,17 @@
 }
 
 .name-card {
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-  border: 2px solid transparent;
-  border-radius: 0.75rem;
+  padding: 0.9rem;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 8px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: border-color 0.18s ease;
   cursor: default;
 }
 
 .name-card:hover {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  border-color: #4f46e5;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.1);
+  border-color: rgba(79,70,229,0.06);
 }
 
 .name-card-lang {
