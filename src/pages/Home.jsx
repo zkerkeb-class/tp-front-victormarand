@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { ChevronLeft, ChevronRight, Loader, Heart, Filter, ArrowUpDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader, Heart, Filter, ArrowUpDown, Sparkles, Swords, Shuffle } from 'lucide-react';
 import './pages.css';
 
 const API_URL = 'http://localhost:3000/api';
@@ -12,6 +12,7 @@ const POKEMON_TYPES = [
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +22,11 @@ const Home = () => {
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
   const [showFilters, setShowFilters] = useState(false);
+  const [shinyMode, setShinyMode] = useState(false);
+  const [team, setTeam] = useState(() => {
+    const saved = localStorage.getItem('pokemonTeam');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem('pokemonFavorites');
     return saved ? JSON.parse(saved) : [];
@@ -121,6 +127,45 @@ const Home = () => {
     });
   };
 
+  const toggleTeam = (pokemon) => {
+    setTeam(prev => {
+      const exists = prev.some(member => member._id === pokemon._id);
+      if (exists) {
+        const updated = prev.filter(member => member._id !== pokemon._id);
+        localStorage.setItem('pokemonTeam', JSON.stringify(updated));
+        return updated;
+      }
+      if (prev.length >= 3) {
+        toast.error('L equipe est limitee a 3 Pokemons');
+        return prev;
+      }
+      const updated = [...prev, { _id: pokemon._id, name: pokemon.name.english, image: pokemon.image }];
+      localStorage.setItem('pokemonTeam', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const clearTeam = () => {
+    setTeam([]);
+    localStorage.setItem('pokemonTeam', JSON.stringify([]));
+  };
+
+  const handleRandomPick = () => {
+    if (pokemons.length === 0) {
+      toast.error('Aucun Pokemon charge');
+      return;
+    }
+    const pick = pokemons[Math.floor(Math.random() * pokemons.length)];
+    navigate(`/pokemon/${pick._id}`);
+  };
+
+  const getShinyImage = (url) => {
+    if (!url) return url;
+    return url.includes('/assets/pokemons/')
+      ? url.replace('/assets/pokemons/', '/assets/pokemons/shiny/')
+      : url;
+  };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       fetchPokemons(currentPage + 1, searchTerm, selectedTypes);
@@ -138,6 +183,42 @@ const Home = () => {
       <div className="page-header">
         <h1 className="page-title">Pokédex</h1>
         <p className="page-subtitle">Gérez votre collection de Pokémons</p>
+      </div>
+
+      <div className="trainer-hub">
+        <div className="trainer-card">
+          <div>
+            <p className="trainer-kicker">Tableau du Dresseur</p>
+            <h2 className="trainer-title">Forge ton equipe et explore la Pokedex</h2>
+          </div>
+          <div className="trainer-metrics">
+            <div className="trainer-metric">
+              <span className="metric-label">Favoris</span>
+              <span className="metric-value">{favorites.length}</span>
+            </div>
+            <div className="trainer-metric">
+              <span className="metric-label">Collection</span>
+              <span className="metric-value">{collection.length}</span>
+            </div>
+            <div className="trainer-metric">
+              <span className="metric-label">Equipe</span>
+              <span className="metric-value">{team.length}/3</span>
+            </div>
+          </div>
+        </div>
+        <div className="trainer-actions">
+          <button
+            className={`trainer-toggle ${shinyMode ? 'active' : ''}`}
+            onClick={() => setShinyMode(!shinyMode)}
+          >
+            <Sparkles size={18} />
+            Mode Shiny
+          </button>
+          <button className="trainer-toggle secondary" onClick={handleRandomPick}>
+            <Shuffle size={18} />
+            Surprise
+          </button>
+        </div>
       </div>
 
       <div className="search-container">
@@ -229,22 +310,6 @@ const Home = () => {
           <div className="pokemon-grid">
             {pokemons.map((pokemon) => (
               <div key={pokemon._id} className="pokemon-card-wrapper">
-                <div className="card-action-buttons">
-                  <button
-                    className={`favorite-btn ${favorites.includes(pokemon._id) ? 'active' : ''}`}
-                    onClick={() => toggleFavorite(pokemon._id)}
-                    title="Ajouter aux favoris"
-                  >
-                    <Heart size={20} />
-                  </button>
-                  <button
-                    className={`collection-btn ${collection.includes(pokemon._id) ? 'active' : ''}`}
-                    onClick={() => toggleCollection(pokemon._id)}
-                    title="Ajouter à ma collection"
-                  >
-                    📦
-                  </button>
-                </div>
                 <Link
                   key={pokemon._id}
                   to={`/pokemon/${pokemon._id}`}
@@ -253,10 +318,56 @@ const Home = () => {
                   <div className="pokemon-card">
                     <div className="pokemon-image-container">
                       <img
-                        src={pokemon.image}
+                        src={shinyMode ? getShinyImage(pokemon.image) : pokemon.image}
                         alt={pokemon.name.english}
                         className="pokemon-image"
+                        onError={(event) => {
+                          if (shinyMode) {
+                            event.currentTarget.src = pokemon.image;
+                          }
+                        }}
                       />
+                    </div>
+                    <div className="pokemon-actions-row">
+                      <button
+                        type="button"
+                        className={`favorite-btn ${favorites.includes(pokemon._id) ? 'active' : ''}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleFavorite(pokemon._id);
+                        }}
+                        title="Ajouter aux favoris"
+                        aria-pressed={favorites.includes(pokemon._id)}
+                      >
+                        <Heart size={18} />
+                      </button>
+                      <button
+                        type="button"
+                        className={`collection-btn ${collection.includes(pokemon._id) ? 'active' : ''}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleCollection(pokemon._id);
+                        }}
+                        title="Ajouter a ma collection"
+                        aria-pressed={collection.includes(pokemon._id)}
+                      >
+                        📦
+                      </button>
+                      <button
+                        type="button"
+                        className={`team-btn ${team.some(member => member._id === pokemon._id) ? 'active' : ''}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleTeam(pokemon);
+                        }}
+                        title="Ajouter a l equipe"
+                        aria-pressed={team.some(member => member._id === pokemon._id)}
+                      >
+                        <Swords size={18} />
+                      </button>
                     </div>
                     <div className="pokemon-card-content">
                       <h3 className="pokemon-name">{pokemon.name.english}</h3>
@@ -283,6 +394,29 @@ const Home = () => {
               </div>
             ))}
           </div>
+
+          {team.length > 0 && (
+            <div className="team-dock">
+              <div className="team-dock-header">
+                <div>
+                  <span className="team-title">Equipe Express</span>
+                  <span className="team-subtitle">Selection rapide pour le duel</span>
+                </div>
+                <button className="team-clear-btn" onClick={clearTeam}>Vider</button>
+              </div>
+              <div className="team-dock-list">
+                {team.map(member => (
+                  <Link key={member._id} to={`/pokemon/${member._id}`} className="team-chip">
+                    <img src={member.image} alt={member.name} />
+                    <span>{member.name}</span>
+                  </Link>
+                ))}
+                <Link to="/comparison?mode=team" className="team-compare-btn">
+                  Comparer
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="pagination">
             <button
