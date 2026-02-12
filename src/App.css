@@ -1,6 +1,67 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: transparent;
+  position: relative;
 }
+
+.app-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(239, 68, 68, 0.16), transparent 40%),
+    radial-gradient(circle at 92% 18%, rgba(245, 158, 11, 0.18), transparent 45%),
+    radial-gradient(circle at 70% 80%, rgba(29, 78, 216, 0.14), transparent 38%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-container::after {
+  content: '';
+  position: fixed;
+  top: -120px;
+  right: -120px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle at 35% 35%, rgba(239, 68, 68, 0.25), rgba(239, 68, 68, 0));
+  border-radius: 50%;
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2.5rem 1.25rem 3.5rem;
+  animation: fadeIn 0.8s ease-out;
+  position: relative;
+  z-index: 1;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: rgba(20, 24, 32, 0.6);
+  font-size: 0.875rem;
+  border-top: 1px solid rgba(20, 24, 32, 0.08);
+  margin-top: auto;
+  background: rgba(255, 246, 230, 0.6);
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1.5rem 0.9rem 2.5rem;
+  }

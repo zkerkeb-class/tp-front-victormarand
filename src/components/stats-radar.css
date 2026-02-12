@@ -1,0 +1,150 @@
+/* STATS RADAR */
+.stats-radar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.stats-radar-svg {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.stats-radar-label-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.stats-radar-value-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.stats-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  padding: 0.85rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eaeef2;
+  transition: border-color 0.18s ease;
+}
+
+.stat-item:hover {
+  border-color: rgba(79,70,229,0.06);
+}
+
+.stat-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.stat-item-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-item-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.stat-item-bar {
+  width: 100%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-item-fill {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 3px;
+}
+
+/* POKEMON NAMES */
+.pokemon-names-section {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: none;
+  margin-bottom: 2rem;
+}
+
+.names-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.names-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.name-card {
+  padding: 0.9rem;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  text-align: center;
+  transition: border-color 0.18s ease;
+  cursor: default;
+}
+
+.name-card:hover {
+  border-color: rgba(79,70,229,0.06);
+}
+
+.name-card-lang {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.name-card-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .stats-radar-container {
+    padding: 1.5rem;
+  }
+
+  .stats-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .names-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
